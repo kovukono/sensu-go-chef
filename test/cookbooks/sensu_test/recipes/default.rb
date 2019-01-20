@@ -6,6 +6,11 @@ sensu_ctl 'default' do
   action [:install, :configure]
 end
 
+sensu_user 'doofus' do
+  password 'doofus1234'
+  groups %w(view admin)
+end
+
 sensu_namespace 'test-org' do
   action :create
 end

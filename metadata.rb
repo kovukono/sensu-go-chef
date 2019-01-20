@@ -6,7 +6,7 @@ description 'Installs/Configures Sensu Go'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.0.3'
 
-chef_version '>= 12.5'
+chef_version '>= 12.14'
 
 %w(
   aix

@@ -54,16 +54,7 @@ action :install do
       end
     end
 
-    ## create a service resource so it can be safely called to restart on the first convergene
-    #service 'sensu-agent' do
-    #  action :nothing
-    #end
-
-    # render template at /etc/sensu/agent.yml for linux
-    file ::File.join(new_resource.config_home, 'agent.yml') do
-      content(JSON.parse(new_resource.config.to_json).to_yaml.to_s)
-      notifies :restart, 'service[sensu-agent]', :delayed
-    end
+    action_configure
 
     # Enable and start the sensu-agent service
     service 'sensu-agent' do
@@ -87,16 +78,7 @@ action :install do
     # Adds install directory to path
     windows_path node['sensu-go']['sensu_bindir']
 
-    ## create a service resource so it can be safely called to restart on the first convergene
-    #service 'SensuAgent' do
-    #  action :nothing
-    #end
-
-    # render template at c:\Programdata\Sensu\config\agent.yml for windows
-    file ::File.join('c:/ProgramData/Sensu/config/', 'agent.yml') do
-      content(JSON.parse(new_resource.config.to_json).to_yaml.to_s)
-      notifies :restart, 'service[SensuAgent]', :delayed
-    end
+    action_configure
 
     # Installs SensuAgent Service
     powershell_script 'SensuAgent Service' do
@@ -108,6 +90,30 @@ action :install do
     # Enable and start SensuAgent service
     service 'SensuAgent' do
       action [:enable, :start]
+    end
+  end
+end
+
+action :configure do
+  if node['platform'] != 'windows'
+    # create a service resource so the yml has something to restart 
+    service 'sensu-agent' do
+      action :nothing
+    end
+    # render template at /etc/sensu/agent.yml for linux
+    file ::File.join(new_resource.config_home, 'agent.yml') do
+      content(JSON.parse(new_resource.config.to_json).to_yaml.to_s)
+      notifies :restart, 'service[sensu-agent]', :delayed
+    end
+  else
+    # create a service resource so the yml has something to restart 
+    service 'sensu-agent' do
+      action :nothing
+    end
+    # render template at c:\Programdata\Sensu\config\agent.yml for windows
+    file ::File.join('c:/ProgramData/Sensu/config/', 'agent.yml') do
+      content(JSON.parse(new_resource.config.to_json).to_yaml.to_s)
+      notifies :restart, 'service[SensuAgent]', :delayed
     end
   end
 end

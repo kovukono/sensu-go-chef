@@ -31,6 +31,7 @@ provides :sensu_mutator
 
 property :command, String, required: true
 property :env_vars, Array
+property :secrets, Array
 property :timeout, Integer
 
 action_class do

@@ -1,6 +1,6 @@
 #
 # Cookbook:: sensu-go
-# Resource:: check
+# Resource:: secret
 #
 # Copyright:: 2020 Sensu, Inc.
 #
@@ -26,33 +26,15 @@
 include SensuCookbook::SensuMetadataProperties
 include SensuCookbook::SensuCommonProperties
 
-resource_name :sensu_check
-provides :sensu_check
-
-property :check_hooks, Array
-property :command, String, default: '/bin/true', required: true
-property :cron, String
-property :handlers, Array, default: [], required: true
-property :high_flap_threshold, Integer
-property :interval, Integer
-property :low_flap_threshold, Integer
-property :proxy_entity_name, String, regex: [/^[\w\.\-]+$/]
-property :proxy_requests, Hash
-property :publish, [true, false]
-property :round_robin, [true, false]
-property :runtime_assets, Array
-property :secrets, Array
-property :stdin, [true, false], default: false
-property :subdue, Hash
-property :subscriptions, Array, default: [], required: true
-property :timeout, Integer
-property :ttl, Integer
-property :output_metric_format, String
-property :output_metric_handlers, Array
+resource_name :sensu_secret
+provides :sensu_secret
 
 action_class do
   include SensuCookbook::Helpers
 end
+
+property :id, String, required: true
+property :secrets_provider, String, required: true
 
 action :create do
   directory object_dir do
@@ -61,7 +43,7 @@ action :create do
   end
 
   file object_file do
-    content JSON.generate(check_from_resource)
+    content JSON.generate(secret_from_resource)
     notifies :run, "execute[sensuctl create -f #{object_file}]"
   end
 
@@ -73,10 +55,10 @@ end
 action :delete do
   file object_file do
     action :delete
-    notifies :run, "execute[sensuctl check delete #{new_resource.name} --skip-confirm]"
+    notifies :run, "execute[sensuctl handler delete #{new_resource.name} --skip-confirm]"
   end
 
-  execute "sensuctl check delete #{new_resource.name} --skip-confirm" do
+  execute "sensuctl handler delete #{new_resource.name} --skip-confirm" do
     action :nothing
   end
 end

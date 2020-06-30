@@ -177,3 +177,30 @@ sensu_active_directory 'example-active-directory-alias' do
     },
   }]
 end
+
+sensu_secrets_provider 'vault' do
+  address 'https://vaultserver.example.com:8200'
+  max_retries 2
+  rate_limiter(
+    'limit': 10,
+    'burst': 100
+  )
+  timeout '60s'
+  tls('ca_cert': '/path/to/your/ca.pem',
+      'client_cert': '/path/to/backend/pem/for/vault.pem',
+      'client_key': '/path/to/backend/key/for/vault.pem',
+      'cname': 'sensu-backend.example.com'
+     )
+  token 'yourVaultToken'
+  version 'v1'
+end
+
+sensu_secret 'env-secret' do
+  id 'CONSUL_TOKEN'
+  provider 'env'
+end
+
+sensu_secret 'vault-secret' do
+  id 'secret/consul#token'
+  provider 'vault'
+end

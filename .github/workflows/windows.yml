@@ -6,6 +6,7 @@ name: windows
   push:
     branches:
       - master
+      - chocolatey
 
 jobs:
   windows_agent:

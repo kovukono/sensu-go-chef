@@ -39,15 +39,15 @@ action_class do
   include SensuCookbook::Helpers::SensuCtl
 end
 
-# load_current_value do
-#   cluster_file = '/root/.config/sensu/sensuctl/cluster'
-#   if ::File.exist?(cluster_file)
-#     backend_url JSON.parse(IO.read(cluster_file))['api-url']
-#   end
-# end
-
 action :install do
-  unless platform?('windows')
+  if platform?('windows')
+    include_recipe 'chocolatey'
+
+    chocolatey_package 'sensu-cli' do
+      action :install
+      version new_resource.version unless new_resource.version == 'latest'
+    end
+  else
     packagecloud_repo new_resource.repo do
       type value_for_platform_family(
         %w(rhel fedora amazon) => 'rpm',
@@ -78,13 +78,12 @@ action :install do
         destination sensuctl_bin
         overwrite true
         action :nothing
-        notifies :delete, 'directory[c:\sensutemp]'
       end
 
       windows_path sensuctl_bin
 
       directory 'c:\sensutemp' do
-        action :nothing
+        action :delete
         recursive true
       end
     end
@@ -111,20 +110,13 @@ action :configure do
 end
 
 action :uninstall do
-  unless platform?('windows')
+  if platform?('windows')
+    chocolatey_package 'sensu-cli' do
+      action :remove
+    end
+  else
     package 'sensu-go-cli' do
       action :remove
-    end
-  end
-
-  if platform?('windows')
-    windows_path sensuctl_bin do
-      action :remove
-    end
-
-    directory sensuctl_bin do
-      action :delete
-      recursive true
     end
   end
 end

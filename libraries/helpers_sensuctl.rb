@@ -5,7 +5,7 @@ module SensuCookbook
         if node['platform'] != 'windows'
           '/usr/bin/sensuctl'
         else
-          'c:\Program Files\Sensu\sensu-cli\bin\sensuctl'
+          'c:\Program Files\Sensu\sensu-cli\bin'
         end
       end
 

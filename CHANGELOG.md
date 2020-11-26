@@ -9,6 +9,7 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 ### Changed
 
 - Moved to Chocolatey to manage sensuctl and sensu-agent on Windows. (@kovukono)
+- Introduced CI/CD testing for windows for agent and ctl (@derekgroh)
 
 ## [1.3.0] - 2020-10-28
 

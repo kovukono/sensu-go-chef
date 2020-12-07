@@ -5,7 +5,7 @@ license 'MIT'
 description 'Installs/Configures Sensu Go'
 version '1.3.0'
 
-chef_version '>= 15.0'
+chef_version '>= 14.0'
 
 %w(
   aix

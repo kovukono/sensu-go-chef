@@ -55,11 +55,14 @@ EOH
 end
 
 # Set sane platform property default so users generally should not need it
-default_ca_cert = value_for_platform_family(
-  %w(rhel fedora amazon) => '/etc/ssl/certs/ca-bundle.crt',
-  'debian' => '/etc/ssl/certs/ca-certificates.crt',
-  'windows' => ''
-)
+default_ca_cert = case node['platform_family']
+                  when 'rhel', 'fedora', 'amazon'
+                    '/etc/ssl/certs/ca-bundle.crt'
+                  when 'debian'
+                    '/etc/ssl/certs/ca-certificates.crt'
+                  when 'windows'
+                    ''
+                  end
 
 # Properties correspond to upstream spec attributes
 # https://docs.sensu.io/sensu-go/latest/operations/deploy-sensu/etcdreplicators/#spec-attributes

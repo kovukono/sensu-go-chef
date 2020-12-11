@@ -27,7 +27,7 @@ jobs:
         os:
           - 'windows-2019'
         suite:
-          - 'all'
+          - 'agent'
       fail-fast: false
 
     steps:

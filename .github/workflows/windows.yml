@@ -32,6 +32,8 @@ jobs:
         # uses: actionshub/chef-install@main
         # TODO: Test newer actions/core
         uses: actionshub/chef-install@dependabot/npm_and_yarn/actions/core-1.2.6
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Kitchen Exec
         uses: actionshub/kitchen-dokken@main
         env:

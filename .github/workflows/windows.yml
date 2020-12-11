@@ -35,9 +35,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@master
       - name: Install Chef
-        # uses: actionshub/chef-install@main
+        uses: actionshub/chef-install@main
         # TODO: Test newer actions/core
-        uses: actionshub/chef-install@dependabot/npm_and_yarn/actions/core-1.2.6
+        # uses: actionshub/chef-install@dependabot/npm_and_yarn/actions/core-1.2.6
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Kitchen Exec

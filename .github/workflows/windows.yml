@@ -36,11 +36,9 @@ jobs:
         uses: actions/checkout@master
       - name: Install Chef
         uses: actionshub/chef-install@main
-        # TODO: Test newer actions/core
-        # uses: actionshub/chef-install@dependabot/npm_and_yarn/actions/core-1.2.6
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        # required for ctl suite
+        # Required for ctl suite
       - name: GitHub Windows Path (Deprecated Add-Path)
         if: ${{ matrix.suite == 'ctl' }}
         run:
@@ -48,7 +46,6 @@ jobs:
           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-
       - name: Kitchen Exec
         uses: actionshub/kitchen-dokken@main
         env:

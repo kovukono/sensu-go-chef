@@ -49,6 +49,8 @@ jobs:
           - 'ubuntu-2004'
         suite:
           - 'default'
+          - 'agent'
+          - 'ctl'
       fail-fast: false
 
     steps:
@@ -65,8 +67,44 @@ jobs:
           suite: ${{ matrix.suite }}
           os: ${{ matrix.os }}
 
+  windows:
+    needs: [mdl, yamllint, delivery]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        os:
+          - 'windows-2019'
+        suite:
+          - 'agent'
+          - 'ctl'
+      fail-fast: false
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@master
+      - name: Install Chef
+        uses: actionshub/chef-install@main
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+        # Required for ctl suite
+      - name: GitHub Windows Path (Deprecated Add-Path)
+        if: ${{ matrix.suite == 'ctl' }}
+        run:
+          echo "c:\Program Files\Sensu\sensu-cli\bin"
+          | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - name: Kitchen Exec
+        uses: actionshub/kitchen-dokken@main
+        env:
+          CHEF_LICENSE: accept-no-persist
+          KITCHEN_LOCAL_YAML: kitchen.exec.yml
+        with:
+          suite: ${{ matrix.suite }}
+          os: ${{ matrix.os }}
+
   final:
-    needs: [dokken]
+    needs: [dokken, windows]
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

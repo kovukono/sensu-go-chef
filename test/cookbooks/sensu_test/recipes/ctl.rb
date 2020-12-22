@@ -3,4 +3,5 @@ sensu_ctl 'default' do
   username 'guest'
   password 'i<3sensu'
   backend_url 'https://caviar.tf.sensu.io:8080/'
+  debug true
 end

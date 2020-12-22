@@ -42,8 +42,14 @@ jobs:
       - name: GitHub Windows Path (Deprecated Add-Path)
         if: ${{ matrix.suite == 'ctl' }}
         run:
-          echo "c:\Program Files\Sensu\sensu-cli\bin"
+          echo "c:\Program Files\Sensu\sensu-cli\bin\sensuctl"
           | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - name: DEBUG
+        if: ${{ matrix.suite == 'ctl' }}
+        run: |
+          $env:path
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Kitchen Exec

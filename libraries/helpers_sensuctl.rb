@@ -41,11 +41,11 @@ module SensuCookbook
         Win32::Registry.open(hkey, subkey) do |reg|
           reg.each_value do |name|
             value = reg.read_s_expand(name)
-            if block && ENV.key?(name)
-              ENV[name] = block.call(name, ENV[name], value)
-            else
-              ENV[name] = value
-            end
+            ENV[name] = if block && ENV.key?(name)
+                          block.call(name, ENV[name], value)
+                        else
+                          ENV[name] = value
+                        end
           end
         end
       end

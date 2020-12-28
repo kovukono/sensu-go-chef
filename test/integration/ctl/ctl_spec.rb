@@ -34,12 +34,8 @@ if os.windows?
   describe os_env('PATH', 'system') do
     its('split') { should include 'C:\Program Files\Sensu\sensu-cli\\\\bin' }
   end
+
   describe chocolatey_package('sensu-cli') do
     it { should be_installed }
-  end
-
-  describe command('sensuctl entity list') do
-    its('stdout') { should match /backend/ }
-    its('exit_status') { should eq 0 }
   end
 end

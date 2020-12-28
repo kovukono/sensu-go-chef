@@ -22,7 +22,7 @@ module SensuCookbook
         if node['platform'] != 'windows'
           [sensuctl_bin, 'configure', sensuctl_configure_opts].flatten
         else
-          ['c:\Program Files\Sensu\sensu-cli\bin\sensuctl.exe', 'configure', sensuctl_configure_opts].flatten.join(' ')
+          ['sensuctl.exe', 'configure', sensuctl_configure_opts].flatten.join(' ')
         end
       end
 
@@ -33,6 +33,32 @@ module SensuCookbook
 
       def sensuctl_asset_update_cmd
         [sensuctl_bin, 'asset', 'update', new_resource.name, sensuctl_asset_update_opts].flatten
+      end
+
+      require 'win32/registry'
+
+      def get_reg_env(hkey, subkey, &block)
+        Win32::Registry.open(hkey, subkey) do |reg|
+          reg.each_value do |name|
+            value = reg.read_s_expand(name)
+            if block && ENV.key?(name)
+              ENV[name] = block.call(name, ENV[name], value)
+            else
+              ENV[name] = value
+            end
+          end
+        end
+      end
+
+      def refresh_env
+        get_reg_env(Win32::Registry::HKEY_LOCAL_MACHINE, 'System\CurrentControlSet\Control\Session Manager\Environment')
+        get_reg_env(Win32::Registry::HKEY_CURRENT_USER, 'Environment') do |name, old_value, new_value|
+          if name.upcase == 'PATH'
+            old_value || File::PATH_SEPARATOR || new_value
+          else
+            new_value
+          end
+        end
       end
     end
   end

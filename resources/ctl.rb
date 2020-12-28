@@ -46,6 +46,14 @@ action :install do
     chocolatey_package 'sensu-cli' do
       action :install
       version new_resource.version unless new_resource.version == 'latest'
+      notifies :run, 'ruby_block[refreshenv]', :immediately
+    end
+
+    ruby_block 'refreshenv' do
+      block do
+        refresh_env
+      end
+      action :nothing
     end
   else
     packagecloud_repo new_resource.repo do

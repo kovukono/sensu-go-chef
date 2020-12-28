@@ -35,8 +35,6 @@ module SensuCookbook
         [sensuctl_bin, 'asset', 'update', new_resource.name, sensuctl_asset_update_opts].flatten
       end
 
-      require 'win32/registry'
-
       def get_reg_env(hkey, subkey, &block)
         Win32::Registry.open(hkey, subkey) do |reg|
           reg.each_value do |name|

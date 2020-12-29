@@ -95,7 +95,7 @@ jobs:
           os: ${{ matrix.os }}
 
   final:
-    needs: [dokken]
+    needs: [dokken, windows]
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

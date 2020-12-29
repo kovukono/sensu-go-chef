@@ -6,7 +6,8 @@ This CHANGELOG follows the format located [here](https://github.com/sensu-plugin
 
 ## [Unreleased]
 
-- Introduced CI/CD testing for windows for agent and ctl (@derekgroh)
+- Add CI/CD testing for windows for agent and ctl (@derekgroh)
+- Improve windows path detection with chocolatey installation for ctl (@derekgroh)
 
 ### Breaking Changes
 

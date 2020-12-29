@@ -38,4 +38,9 @@ if os.windows?
   describe chocolatey_package('sensu-cli') do
     it { should be_installed }
   end
+
+  describe command('sensuctl entity list') do
+    its('stdout') { should match /backend/ }
+    its('exit_status') { should eq 0 }
+  end
 end

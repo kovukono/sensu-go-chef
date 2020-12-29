@@ -87,19 +87,6 @@ jobs:
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         # Required for ctl suite
-      - name: GitHub Windows Path (Deprecated Add-Path)
-        if: ${{ matrix.suite == 'ctl' }}
-        run:
-          echo "c:\Program Files\Sensu\sensu-cli\bin\"
-          | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      - name: DEBUG
-        if: ${{ matrix.suite == 'ctl' }}
-        run:
-          echo "%PATH%"
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Kitchen Exec
         uses: actionshub/kitchen-dokken@main
         env:

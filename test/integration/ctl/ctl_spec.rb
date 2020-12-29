@@ -40,7 +40,6 @@ if os.windows?
   end
 
   describe command('sensuctl entity list') do
-    its('stdout') { should match /backend/ }
     its('exit_status') { should eq 0 }
   end
 end

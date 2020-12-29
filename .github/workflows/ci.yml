@@ -14,7 +14,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@master
       - name: Run Chef Delivery
-        uses: actionshub/chef-delivery@master
+        uses: actionshub/chef-delivery@main
         env:
           CHEF_LICENSE: accept-no-persist
 
@@ -32,7 +32,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@master
       - name: Run Markdown Lint
-        uses: actionshub/markdownlint@master
+        uses: actionshub/markdownlint@main
 
   dokken:
     needs: [mdl, yamllint, delivery]
@@ -42,20 +42,21 @@ jobs:
         os:
           - 'amazonlinux'
           - 'amazonlinux-2'
-          - 'centos-6'
           - 'centos-7'
+          - 'centos-8'
           - 'ubuntu-1604'
           - 'ubuntu-1804'
           - 'ubuntu-2004'
         suite:
           - 'default'
+          - 'agent'
       fail-fast: false
 
     steps:
       - name: Check out code
         uses: actions/checkout@master
       - name: Install Chef
-        uses: actionshub/chef-install@master
+        uses: actionshub/chef-install@main
       - name: Dokken
         uses: actionshub/kitchen-dokken@master
         env:
@@ -84,7 +85,6 @@ jobs:
         uses: actionshub/chef-install@main
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        # Required for ctl suite
       - name: Kitchen Exec
         uses: actionshub/kitchen-dokken@main
         env:

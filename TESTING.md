@@ -1,5 +1,9 @@
 # TESTING
 
+## GitHub Actions
+
+This cookbook is configured to run CI/CD tests on the master/main branch. Each commit will be tested for delivery, yamllint, and markdown. Once complete platform tests will be initiated. This covers backend, agent, and ctl on linux and agent and ctl on windows.
+
 ## Chef Development Kit
 
 The [ChefDK](https://docs.chef.io/about_chefdk.html) contains all the tools required to test and develop for this cookbook. A `project.toml` file is provided so that all testing commands can be run using the `delivery local` cli that comes with ChefDK.

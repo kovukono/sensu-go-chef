@@ -32,7 +32,7 @@ The following platforms have been tested with Test Kitchen. It will most likely 
 |                | 0.0.1             |
 | amazonlinux    | X                 |
 | amazonlinux-2  | X                 |
-| centos-6       | X                 |
+| centos-6       | X (EOL 2020-11)   |
 | centos-7       | X                 |
 | fedora         | X                 |
 | ubuntu-16.04   | X                 |

@@ -65,6 +65,35 @@ jobs:
           suite: ${{ matrix.suite }}
           os: ${{ matrix.os }}
 
+  windows:
+    needs: [mdl, yamllint, delivery]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        os:
+          - 'windows-2019'
+        suite:
+          - 'agent'
+          - 'ctl'
+      fail-fast: false
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@master
+      - name: Install Chef
+        uses: actionshub/chef-install@main
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+        # Required for ctl suite
+      - name: Kitchen Exec
+        uses: actionshub/kitchen-dokken@main
+        env:
+          CHEF_LICENSE: accept-no-persist
+          KITCHEN_LOCAL_YAML: kitchen.exec.yml
+        with:
+          suite: ${{ matrix.suite }}
+          os: ${{ matrix.os }}
+
   final:
     needs: [dokken]
     runs-on: ubuntu-latest
